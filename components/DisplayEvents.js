@@ -40,32 +40,35 @@ export default function DisplayEvents() {
 
    }
 
+  const renderItem= ({ item }) => {
+    return (
+      <View>
+        <Image styles={styles.imgContainer} source={item.description.images[0].url} />
+        <View >
+          <Text>
+          {
+            'Name: ' + item.name.fi + '\n'+
+            'Description: '+ item.description.intro + '\n'+
+            'Date: ' + item.event_dates.starting_day + '\n'+
+            'Location: ' + item.location.address.street_address + ', ' +
+            item.location.address.locality+  '\n'+
+            '\n'
+          }
+          </Text>
+        </View>
+       </View>
+     )
+ }
+
   return (
     <ScrollView>
     <View style={styles.container}>
-       <Text>Events: </Text>
+       <Text>All Events: </Text>
   
        <FlatList
         data={data}
         keyExtractor={({ id }, index) => id}
-        renderItem={({ item }) => {
-          return (
-            
-            <Text>
-            {
-              'Name: ' + item.name.fi + '\n'+
-              'Description: '+ item.description.intro + '\n'+
-              'Date: ' + item.event_dates.starting_day + '\n'+
-              'Location: ' + item.location.address.street_address + ', ' +
-              item.location.address.locality+  '\n'+
-              '\n'
-             }
-             </Text>
-           )
-       }
-
-     }
-     
+        renderItem={renderItem}
      />
 
     </View>
@@ -75,9 +78,10 @@ export default function DisplayEvents() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 10,
+    flex: 20,
     color:'grey',
     backgroundColor: 'white',
+   
     //alignItems: 'center',
     height: 150,
     //justifyContent: 'center',
@@ -100,8 +104,13 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   imgContainer:{
-    width:100,
+   
+    width:50,
     height:50,
+    borderWidth:2,
+    borderColor:'#d35647',
+    resizeMode:'contain',
+    margin:8
   }
 });
 
@@ -124,7 +133,7 @@ const styles = StyleSheet.create({
             '\n'
            } 
            </Text>
-<Image styles={styles.imgContainer} source={item.description.images[0].url} />
+<Image styles={styles.imgContainer} source={uri: item.description.images[0].url} />
            <Image source={item.description.images[0].url} // Use item to set the image source
             key={id} // Important to set a key for list items
             style={{
