@@ -15,7 +15,7 @@ export default function Map() {
 
 
     const ShowAddress= () => { 
-        console.log("...showing");
+       
         fetch(`http://www.mapquestapi.com/geocoding/v1/address?key=nuommZxm9EC8dMZmWKJWujcrpDWMRsf1&location=`+location) 
         .then(response => response.json())
         .then(jsonData=> {

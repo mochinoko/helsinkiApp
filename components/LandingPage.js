@@ -1,8 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
+
 import React from 'react';
 import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
 import Map from './Map';
 import SearchKeywords from './SearchKeywords';
+import DisplayEvents from './DisplayEvents';
 
 
 export default function LandingPage() {
@@ -12,7 +13,8 @@ export default function LandingPage() {
         <Map /> 
         <View style={styles.container}>
           <Text style={styles.txtContainer}>Search Events in Helsinki!</Text>
-          <SearchKeywords /> 
+        
+          <DisplayEvents />
         </View>
         <View style={styles.container}>
      
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    height: 100,
+    height: 500,
     justifyContent: 'center',
     margin: 5
   },
