@@ -4,15 +4,16 @@ import { Alert, StyleSheet, View, Button, TextInput, InputAccessoryView} from 'r
 export default function SearchKeywords() {
     
     
+    
     return (
         <View style={styles.container}>
-            <Button title="Food" style={styles.buttonContainer} />
-            <Button title="Sports" style={styles.buttonContainer} />
-            <Button title="Festivals" style={styles.buttonContainer} />
+            <Button title="Helsinki" style={styles.buttonContainer} />
+            <Button title="Espoo" style={styles.buttonContainer} />
+            <Button title="Vantaa" style={styles.buttonContainer} />
             <Button title="Music" style={styles.buttonContainer} />
             <Button title="Families" style={styles.buttonContainer} />
+            <Button title="Kids" style={styles.buttonContainer} />
         </View>
-   
     );
 }        
     const styles = StyleSheet.create({
