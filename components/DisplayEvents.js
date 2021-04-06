@@ -1,5 +1,6 @@
 import React, {useState, useEffect}  from 'react';
 import { StyleSheet, Text, View, Button, TextInput, FlatList, InputAccessoryView, Image , ScrollView } from 'react-native';
+import _ from 'lodash';
 
 const baseurl = "http://open-api.myhelsinki.fi/v1/events/";
 
@@ -14,6 +15,7 @@ export default function DisplayEvents() {
   
   useEffect(() => {
     getAllEvents();
+
   }, [])
 
   // function to fetch all events
@@ -24,16 +26,24 @@ export default function DisplayEvents() {
         .then((data) => setData(data.data))
         .then((data)=> setFullData(data.data))
         .catch((error) => console.error(error))
-        //console.log(data.name);
+        console.log('loading');
   }
 
   // Search function: extracts the entered value 
   //in the texgt field and campare it with the data from the data
 
   const handleSearch = (query) => {
-  
+    const newData = fullData.filter(function(item) {
+      const name = item.name.fi ? item.name.fi.toUpperCase() : ''
+      const itemData=`${name}`;
+      const textData=query.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    setFullData(newData); 
+    setQuery(query);
   };
 
+ 
 
    // function to fecth based on a tag name
 
@@ -98,14 +108,14 @@ const styles = StyleSheet.create({
     height: 500,
     //justifyContent: 'center',
     margin: 5,
- 
   },
   txtContainer: {
     flex: 1,
     fontSize: 24, 
     //alignItems: 'center',
    // justifyContent: 'center',
-    margin: 5
+    margin: 5,
+   // backgroundColor: 'grey'
   },
   buttoncontainer:{
     flexDirection: 'row',
