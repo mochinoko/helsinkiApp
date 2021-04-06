@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    height: 500,
+    height: 300,
     justifyContent: 'center',
     margin: 5
   },
   txtContainer: {
-    flex: 2,
+    flex: 1,
     fontSize: 24, 
     alignItems: 'center',
     justifyContent: 'center',

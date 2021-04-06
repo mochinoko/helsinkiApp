@@ -21,12 +21,9 @@ export default function DisplayEvents() {
       fetch(baseurl)
         .then((response) => response.json())
         .then((data) => setData(data.data))
-        
         .catch((error) => console.error(error))
         //console.log(data.name);
   }
-
-
 
   // function to filter events
 
@@ -42,15 +39,7 @@ export default function DisplayEvents() {
 
   const renderItem= ({ item }) => {
     return (
-      <View>
-        <Image 
-          style={styles.imgContainer} 
-          source={{uri: item.description.images[0].url ? 
-                `${item.description.images[0].url}` : 
-                'https://www.freeiconspng.com/uploads/no-image-icon-4.png' }}
-        />
-       
-        
+      <View>  
         <View >
           <Text>
           {
@@ -68,7 +57,7 @@ export default function DisplayEvents() {
  }
 
   return (
-    <ScrollView>
+　 　
     <View style={styles.container}>
        <Text>All Events: </Text>
        <FlatList
@@ -78,29 +67,27 @@ export default function DisplayEvents() {
      />
 
     </View>
-    </ScrollView>
+  
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 20,
+    flex: 4,
     color:'grey',
     backgroundColor: 'white',
-   
     //alignItems: 'center',
-    height: 150,
+    height: 200,
     //justifyContent: 'center',
     margin: 5,
  
   },
   txtContainer: {
-    flex: 2,
+    flex: 1,
     fontSize: 24, 
     //alignItems: 'center',
    // justifyContent: 'center',
     margin: 5
-    
   },
   buttoncontainer:{
     flexDirection: 'row',
@@ -110,8 +97,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   imgContainer:{
-    width:300,
-    height:300,
+    width:50,
+    height:50,
     //borderWidth:2,
     borderColor:'#d35647',
     resizeMode:'contain',
@@ -153,4 +140,12 @@ const styles = StyleSheet.create({
               margin:8
             }}
           />
+
+          <Image 
+          style={styles.imgContainer} 
+          source={{uri: item.description.images[0].url ? 
+                  `${item.description.images[0].url}` : 
+                  'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
+                  }}
+        />
      */
