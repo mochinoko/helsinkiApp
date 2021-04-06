@@ -6,9 +6,10 @@ const baseurl = "http://open-api.myhelsinki.fi/v1/events/";
 export default function DisplayEvents() {
   
   const [data, setData] = useState([]);
-  //Keywords that user has inputted
-  const [input, setInput] = useState();
-  const [img, setImg] = useState([]);
+  //any input provided by the user to search through the list of data.
+  const [query, setQuery] = useState('');
+  //hold the data from the API that is going to be used to filter the data.
+  const [fullData, setFullData] = useState([]); 
 
   
   useEffect(() => {
@@ -21,15 +22,18 @@ export default function DisplayEvents() {
       fetch(baseurl)
         .then((response) => response.json())
         .then((data) => setData(data.data))
+        .then((data)=> setFullData(data.data))
         .catch((error) => console.error(error))
         //console.log(data.name);
   }
 
-  // function to filter events
+  // Search function: extracts the entered value 
+  //in the texgt field and campare it with the data from the data
 
-  const filterEvents = () => {
-    
-  }
+  const handleSearch = (query) => {
+  
+  };
+
 
    // function to fecth based on a tag name
 
@@ -40,11 +44,11 @@ export default function DisplayEvents() {
   const renderItem= ({ item }) => {
     return (
       <View>  
+     
       <Image 
           style={styles.imgContainer} 
           source={{uri: item.description.images[0].url ? 
-                  `${item.description.images[0].url}` : 
-                  'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
+                  `${item.description.images[0].url}` : 'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
                   }}
         />
         <View >
@@ -67,6 +71,13 @@ export default function DisplayEvents() {
 　 　
     <View style={styles.container}>
        <Text>All Events: </Text>
+       <TextInput
+        style={styles.textContainer}
+        onChangeText={(query)=> handleSearch(query)}
+        value={query}
+        placeholder="Search events..." 
+        />
+       <Button title="Find" onPress={handleSearch} style={styles.buttoncontainer} />
        <FlatList
         data={data}
         keyExtractor={({ id }, index) => id}
