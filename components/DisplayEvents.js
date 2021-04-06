@@ -43,7 +43,14 @@ export default function DisplayEvents() {
   const renderItem= ({ item }) => {
     return (
       <View>
-        <Image styles={styles.imgContainer} source={item.description.images[0].url} />
+        <Image 
+          style={styles.imgContainer} 
+          source={{uri: item.description.images[0].url ? 
+                `${item.description.images[0].url}` : 
+                'https://www.freeiconspng.com/uploads/no-image-icon-4.png' }}
+        />
+       
+        
         <View >
           <Text>
           {
@@ -64,7 +71,6 @@ export default function DisplayEvents() {
     <ScrollView>
     <View style={styles.container}>
        <Text>All Events: </Text>
-  
        <FlatList
         data={data}
         keyExtractor={({ id }, index) => id}
@@ -104,10 +110,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   imgContainer:{
-   
-    width:50,
-    height:50,
-    borderWidth:2,
+    width:300,
+    height:300,
+    //borderWidth:2,
     borderColor:'#d35647',
     resizeMode:'contain',
     margin:8
@@ -121,7 +126,10 @@ const styles = StyleSheet.create({
          <Text>{'id:'+ item.id + ', Name: ' + item.name.fi}</Text>
        )}
      />
-     
+      <Image 
+          styles={styles.imgContainer} 
+          source={'item.description.images[0].url'} 
+        />
 
       <Text>
           {
