@@ -40,6 +40,13 @@ export default function DisplayEvents() {
   const renderItem= ({ item }) => {
     return (
       <View>  
+      <Image 
+          style={styles.imgContainer} 
+          source={{uri: item.description.images[0].url ? 
+                  `${item.description.images[0].url}` : 
+                  'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
+                  }}
+        />
         <View >
           <Text>
           {
@@ -77,7 +84,7 @@ const styles = StyleSheet.create({
     color:'grey',
     backgroundColor: 'white',
     //alignItems: 'center',
-    height: 200,
+    height: 500,
     //justifyContent: 'center',
     margin: 5,
  
@@ -97,12 +104,12 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   imgContainer:{
-    width:50,
-    height:50,
+    width:200,
+    height:200,
     //borderWidth:2,
     borderColor:'#d35647',
     resizeMode:'contain',
-    margin:8
+    margin:5
   }
 });
 
