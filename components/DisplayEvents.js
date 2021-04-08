@@ -11,11 +11,11 @@ export default function DisplayEvents() {
   const [query, setQuery] = useState('');
   //hold the data from the API that is going to be used to filter the data.
   const [fullData, setFullData] = useState([]); 
-
+  const [searchData, setSearchData] = useState('');
   
   useEffect(() => {
     getAllEvents();
-
+    
   }, [])
 
   // function to fetch all events
@@ -37,34 +37,21 @@ export default function DisplayEvents() {
   */
 
   const handleSearch = (query) => {
-    const newData = fullData.filter(function(item) {
-      const name = item.name.fi ? item.name.fi.toUpperCase() : ''
-      const itemData=`${name}`;
-      const textData=query.toUpperCase();
+    const newData = data.filter(function (item) {
+      const name = item.name.fi ? item.name.fi.toString().toUpperCase() : ''
+      const itemData = `${name}`;
+      const textData = query.toString().toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
-    setData(newData); 
+    setFullData(newData);
     setQuery(query);
   }
-/*
-  const handleSearch = (query) => {
-    const newData = fullData.filter(function(item) {
-      const name = item.name.fi ? item.name.fi.toUpperCase() : ''
-      const itemData=`${name}`;
-      const textData=query.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-    setData(newData); 
-    setQuery(query);
-  };
-*/
+  
+//Create Read more button function
  
+const readrMore = () => {
 
-   // function to fecth based on a tag name
-
-   const fetchTag = () => {
-
-   }
+}
 
   const renderItem= ({ item }) => {
     return (
@@ -88,6 +75,8 @@ export default function DisplayEvents() {
           }
           </Text>
         </View>
+        <Button title="Read more" onPress={readrMore} style={styles.buttoncontainer} />
+
        </View>
      )
  }
@@ -102,17 +91,11 @@ export default function DisplayEvents() {
         value={query}
         placeholder="Search events..." 
         />
-       <Button title="Find" onPress={handleSearch} style={styles.buttoncontainer} />
-       <FlatList
-        data={data}
+        <FlatList
+        data={fullData}
         keyExtractor={({ id }, index) => id}
         renderItem={renderItem}
-     />
-     <FlatList
-     data={fullData}
-     keyExtractor={({ id }, index) => id}
-     renderItem={renderItem}
-    />
+        />
 
     </View>
   
@@ -121,11 +104,11 @@ export default function DisplayEvents() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 4,
+    flex: 50,
     color:'grey',
     backgroundColor: 'white',
     //alignItems: 'center',
-    height: 500,
+    height: 700,
     //justifyContent: 'center',
     margin: 5,
   },
@@ -145,8 +128,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   imgContainer:{
-    width:200,
-    height:200,
+    width:100,
+    height:100,
     //borderWidth:2,
     borderColor:'#d35647',
     resizeMode:'contain',
@@ -195,5 +178,10 @@ const styles = StyleSheet.create({
                   `${item.description.images[0].url}` : 
                   'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
                   }}
+        />
+        <FlatList
+        data={data}
+        keyExtractor={({ id }, index) => id}
+        renderItem={renderItem}
         />
      */
