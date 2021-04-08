@@ -23,14 +23,18 @@ export default function DisplayEvents() {
   const getAllEvents = () => {   
       fetch(baseurl)
         .then((response) => response.json())
-        .then((data) => setData(data.data))
-        .then((data)=> setFullData(data.data))
+        .then((data) => { 
+          setData(data.data)
+          setFullData(data.data)
+        })
         .catch((error) => console.error(error))
         console.log('loading');
   }
 
-  // Search function: extracts the entered value 
-  //in the texgt field and campare it with the data from the data
+  /*
+  Search function: extracts the entered value 
+  in the text field and campare it with the data from the data
+  */
 
   const handleSearch = (query) => {
     const newData = fullData.filter(function(item) {
@@ -39,10 +43,21 @@ export default function DisplayEvents() {
       const textData=query.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
-    setFullData(newData); 
+    setData(newData); 
+    setQuery(query);
+  }
+/*
+  const handleSearch = (query) => {
+    const newData = fullData.filter(function(item) {
+      const name = item.name.fi ? item.name.fi.toUpperCase() : ''
+      const itemData=`${name}`;
+      const textData=query.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    setData(newData); 
     setQuery(query);
   };
-
+*/
  
 
    // function to fecth based on a tag name
@@ -93,6 +108,11 @@ export default function DisplayEvents() {
         keyExtractor={({ id }, index) => id}
         renderItem={renderItem}
      />
+     <FlatList
+     data={fullData}
+     keyExtractor={({ id }, index) => id}
+     renderItem={renderItem}
+    />
 
     </View>
   
