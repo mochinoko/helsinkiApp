@@ -78,9 +78,14 @@ export default function Map() {
              ))}
             
         </MapView>
-       
+        <View style={styles.buttonContainer}>
+            <Button title="Helsinki" style={styles.buttonContainer}  onPress = {fetchLocation }/>
+            <Button title="Espoo" style={styles.buttonContainer}  />
+            <Button title="Vantaa" style={styles.buttonContainer}  />
+        </View>
        
         </View>
+        
    
     );
 }        
@@ -114,9 +119,9 @@ export default function Map() {
         buttonContainer:{
           flexDirection: 'row',
           alignItems: 'center',
-          //justifyContent: 'space-around',
-          borderTopWidth: 1,
+          justifyContent: 'space-around',
+         // borderTopWidth: 1,
           fontSize: 24, 
-         
+         margin: 5,
         },
       });

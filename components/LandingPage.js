@@ -14,7 +14,7 @@ export default function LandingPage() {
        <Map/>
       </View>
         <Text style={styles.txtContainer}>Search Events in Helsinki!</Text>
-        <SearchLocation />
+       
         <View style={styles.container}>
           <DisplayEvents />
         </View>
