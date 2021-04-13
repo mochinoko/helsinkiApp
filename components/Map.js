@@ -12,6 +12,7 @@ export default function Map() {
         latitudeDelta: 0.1, 
         longitudeDelta: 0.1
     });
+    const [markers, SetMarkers] = React.useState([]);
 
 /*
     const ShowAddress= () => { 
@@ -35,7 +36,7 @@ export default function Map() {
 */
 
     const fetchLocation = () => {
-        fetch(`http://open-api.myhelsinki.fi/v1/events/`)
+        fetch(`http://open-api.myhelsinki.fi/v1/events/?limit=100`)
         .then(response =>response.json())
         .then(jsonData=>{
             const lat= jsonData.data.location.lat;
@@ -46,6 +47,7 @@ export default function Map() {
                 latitudeDelta: 0.02, 
                 longitudeDelta: 0.02
             });
+            SetMarkers(jsondata.data);
         })
         .catch((error) => {
             Alert.alert('Error', error);
@@ -64,13 +66,17 @@ export default function Map() {
             provider='google'
             tintColor='blue'
              > 
-            <Marker
+             {markers.map((marker, index)=> (
+                <Marker
+                key={index}
                 coordinate={{
                 latitude:  region.latitude,
                 longitude: region.longitude
                 }}
                 title={location} 
-            />
+                />
+             ))}
+            
         </MapView>
        
        
