@@ -12,7 +12,7 @@ export default function Map() {
         latitudeDelta: 0.1, 
         longitudeDelta: 0.1
     });
-    const [markers, SetMarkers] = React.useState([]);
+    const [markers, setMarkers] = React.useState([]);
 
 /*
     const ShowAddress= () => { 
@@ -34,7 +34,7 @@ export default function Map() {
         });
     } 
 */
-
+console.log(markers);
     const fetchLocation = () => {
         fetch(`http://open-api.myhelsinki.fi/v1/events/?limit=100`)
         .then(response =>response.json())
@@ -47,12 +47,12 @@ export default function Map() {
                 latitudeDelta: 0.02, 
                 longitudeDelta: 0.02
             });
-            SetMarkers(jsondata.data);
+            setMarkers(jsondata.data);
         })
         .catch((error) => {
             Alert.alert('Error', error);
         });
-        
+        console.log('fetching location..')
     }
     return (
         <View style={styles.container}>
