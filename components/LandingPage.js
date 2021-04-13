@@ -2,7 +2,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
 import Map from './Map';
-import SearchKeywords from './SearchKeywords';
+import SearchLocation from './SearchLocation';
 import DisplayEvents from './DisplayEvents';
 
 
@@ -10,10 +10,12 @@ export default function LandingPage() {
 
   return (
     <View style={styles.container}>
-        <Map /> 
+      <View style={styles.container}>
+       <Map/>
+      </View>
+        <Text style={styles.txtContainer}>Search Events in Helsinki!</Text>
+        <SearchLocation />
         <View style={styles.container}>
-          <Text style={styles.txtContainer}>Search Events in Helsinki!</Text>
-        
           <DisplayEvents />
         </View>
         <View style={styles.container}>
@@ -33,20 +35,13 @@ const styles = StyleSheet.create({
     margin: 5
   },
   txtContainer: {
-    flex: 1,
+    //flex: 1,
     fontSize: 24, 
     alignItems: 'center',
     justifyContent: 'center',
     margin: 5
-    
   },
-  buttoncontainer:{
-    flexDirection: 'row',
-    backgroundColor:'#fff',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    borderTopWidth: 1,
-  },
+  
 });
 
 // <Map />  

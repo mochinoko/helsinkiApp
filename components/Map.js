@@ -13,7 +13,7 @@ export default function Map() {
         longitudeDelta: 0.1
     });
 
-
+/*
     const ShowAddress= () => { 
        
         fetch(`http://www.mapquestapi.com/geocoding/v1/address?key=nuommZxm9EC8dMZmWKJWujcrpDWMRsf1&location=`+location) 
@@ -32,7 +32,26 @@ export default function Map() {
             Alert.alert('Error', error);
         });
     } 
-    
+*/
+
+    const fetchLocation = () => {
+        fetch(`http://open-api.myhelsinki.fi/v1/events/`)
+        .then(response =>response.json())
+        .then(jsonData=>{
+            const lat= jsonData.data.location.lat;
+            const lng=jsonData.data.location.lng;
+            setRegion({
+                latitude: lat,
+                longitude: lng,
+                latitudeDelta: 0.02, 
+                longitudeDelta: 0.02
+            });
+        })
+        .catch((error) => {
+            Alert.alert('Error', error);
+        });
+        
+    }
     return (
         <View style={styles.container}>
   
@@ -53,19 +72,8 @@ export default function Map() {
                 title={location} 
             />
         </MapView>
-        
-        <InputAccessoryView >
-         <View style={styles.map_container}>
-            <TextInput 
-                style = {styles.txtInputContainer}
-                value={location}
-                placeholder = "Address, City"
-                onChangeText = {(location) => setLocation(location)}
-            />
-            <Button title="Search" onPress={ShowAddress} style={styles.buttonContainer} />
-            
-        </View>
-        </InputAccessoryView>
+       
+       
         </View>
    
     );
@@ -74,22 +82,22 @@ export default function Map() {
         container: {
             flex: 1,
             backgroundColor: '#fff',
-            width: 500,
+            width: 700,
             justifyContent: 'center',
-            padding: 20,
+            padding: 5,
             alignItems: 'center',
           },
         map_container: {
-          flex: 2,
+         // flex: 1,
           backgroundColor: '#fff',
           alignItems: 'center',
           justifyContent: 'center',
           padding: 10,
           width: "150%",
-          height: "50%",
+          height: "100%",
         },
         txtInputContainer:{
-            flex: 1, 
+            //flex: 1, 
             borderTopWidth: 1,
             width: '80%', 
             fontSize: 20, 

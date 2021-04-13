@@ -1,8 +1,9 @@
 import React, {useState, useEffect}  from 'react';
 import { StyleSheet, Text, View, Button, TextInput, FlatList, InputAccessoryView, Image , ScrollView } from 'react-native';
 import _ from 'lodash';
+import { Icon } from 'react-native-elements'
 
-const baseurl = "http://open-api.myhelsinki.fi/v1/events/";
+const baseurl = "http://open-api.myhelsinki.fi/v1/events/?limit=100";
 
 export default function DisplayEvents() {
   
@@ -11,11 +12,12 @@ export default function DisplayEvents() {
   const [query, setQuery] = useState('');
   //hold the data from the API that is going to be used to filter the data.
   const [fullData, setFullData] = useState([]); 
-  const [searchData, setSearchData] = useState('');
+
+
   
   useEffect(() => {
     getAllEvents();
-    
+
   }, [])
 
   // function to fetch all events
@@ -28,32 +30,36 @@ export default function DisplayEvents() {
           setFullData(data.data)
         })
         .catch((error) => console.error(error))
-        console.log('loading');
+        console.log('loading....');
   }
 
+
   /*
-  Search function: extracts the entered value 
+  Name Search function: extracts the entered value 
   in the text field and campare it with the data from the data
   */
 
   const handleSearch = (query) => {
-    const newData = data.filter(function (item) {
-      const name = item.name.fi ? item.name.fi.toString().toUpperCase() : ''
+    const newData = data.filter(function(item) {
+      const name = item.name.fi ?  item.name.fi.toString().toUpperCase() : '';
       const itemData = `${name}`;
       const textData = query.toString().toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
     setFullData(newData);
     setQuery(query);
-  }
   
+  }
+
+
 //Create Read more button function
  
-const readrMore = () => {
+const readMore = () => {
 
 }
 
   const renderItem= ({ item }) => {
+  
     return (
       <View>  
      
@@ -75,8 +81,18 @@ const readrMore = () => {
           }
           </Text>
         </View>
-        <Button title="Read more" onPress={readrMore} style={styles.buttoncontainer} />
+   
+        <View styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <Text >Add to favourites</Text>
+        <Icon
+          name='hearto'
+          type='antdesign'
+          color='#517fa4'
+        />
+        </View>
 
+        <Button title="Read more" onPress={readMore} style={styles.buttoncontainer} />
+        
        </View>
      )
  }
@@ -87,9 +103,9 @@ const readrMore = () => {
        <Text>All Events: </Text>
        <TextInput
         style={styles.textContainer}
-        onChangeText={(query)=> handleSearch(query)}
+        onChangeText={(query)=> handleSearch(query) }
         value={query}
-        placeholder="Search events..." 
+        placeholder="Search events by name..." 
         />
         <FlatList
         data={fullData}
@@ -104,7 +120,7 @@ const readrMore = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 50,
+    flex: 5,
     color:'grey',
     backgroundColor: 'white',
     //alignItems: 'center',
@@ -113,7 +129,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   txtContainer: {
-    flex: 1,
+    //flex: 1,
     fontSize: 24, 
     //alignItems: 'center',
    // justifyContent: 'center',
