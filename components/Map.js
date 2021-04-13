@@ -122,6 +122,6 @@ export default function Map() {
           justifyContent: 'space-around',
          // borderTopWidth: 1,
           fontSize: 24, 
-         margin: 5,
+        margin: 5,
         },
       });
