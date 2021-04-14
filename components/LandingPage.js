@@ -19,7 +19,7 @@ export default function LandingPage() {
        <Map/>
       </View>
       <View style={styles.txtContainer}>
-        <Text >Search Events in Helsinki!</Text>
+        <Text >Search Events near Helsinki!</Text>
         </View>
         <View style={styles.displayContainer}>
           <DisplayEvents />
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     //flex: 1,
     backgroundColor: '#fff',
    //alignItems: 'center',
-    marginBottom: 10,
     width: '100%',
   },
   mapContainer: {
@@ -53,6 +52,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 5,
     width: '100%',
+   // height: '100%',
   },
   displayContainer: {
     flex:1,
