@@ -17,26 +17,6 @@ export default function Map() {
     const [markers, setMarkers] = React.useState([]);
 
 
-/*
-    const ShowAddress= () => { 
-       
-        fetch(`http://www.mapquestapi.com/geocoding/v1/address?key=nuommZxm9EC8dMZmWKJWujcrpDWMRsf1&location=`+location) 
-        .then(response => response.json())
-        .then(jsonData=> {
-            const lat = jsonData.results[0].locations[0].latLng.lat;
-            const lng = jsonData.results[0].locations[0].latLng.lng;
-            setRegion({   
-                latitude: lat, 
-                longitude: lng, 
-                latitudeDelta: 0.02, 
-                longitudeDelta: 0.02
-                });
-             }) 
-        .catch((error) => {
-            Alert.alert('Error', error);
-        });
-    } 
-*/
 
         useEffect(() => {
             fetchLocation();
@@ -44,9 +24,8 @@ export default function Map() {
         }, [])
 
 
-console.log(markers);
     const fetchLocation = () => {
-        fetch(`http://open-api.myhelsinki.fi/v1/events/?limit=100`)
+        fetch(`http://open-api.myhelsinki.fi/v1/events/?limit=1000`)
         .then(response =>response.json())
         .then(jsonData=>{
             //const lat= jsonData.data[0].location.lat;
@@ -61,6 +40,35 @@ console.log(markers);
     }
     //console.log(markers);
 
+    // function to point Events in Espoo
+    const fetchEspoo = () => {
+            setRegion({   
+                latitude: 60.2055, 
+                longitude: 24.6559, 
+                latitudeDelta: 0.1, 
+                longitudeDelta: 0.1
+            });
+    }
+    // function to point Events in Helsinki
+    const fetchHelsinki = () => {
+            setRegion({   
+                latitude: 60.170275, 
+                longitude: 24.943749, 
+                latitudeDelta: 0.1, 
+                longitudeDelta: 0.1
+            });
+        
+    }
+    // function to point Events in Vantaa
+        const fetchVantaa= () => {
+                setRegion({   
+                    latitude: 60.2934, 
+                    longitude: 25.0378, 
+                    latitudeDelta: 0.1, 
+                    longitudeDelta: 0.1
+                });   
+        }
+    
     return (
         <View style={styles.container}>
   
@@ -88,9 +96,9 @@ console.log(markers);
                  ))}
             </MapView>
             <View style={styles.buttonContainer}>
-                <Button title="Helsinki" style={styles.buttonOne} onPress={fetchLocation}/>
-                <Button title="Espoo" style={styles.buttonTwo}  />
-                <Button title="Vantaa" style={styles.buttonThree}  />
+                <Button title="Helsinki" style={styles.buttonOne} onPress={fetchHelsinki}/>
+                <Button title="Espoo" style={styles.buttonTwo}  onPress={fetchEspoo}/>
+                <Button title="Vantaa" style={styles.buttonThree} onPress={fetchVantaa} />
             </View>
        
         </View>
@@ -108,7 +116,7 @@ console.log(markers);
             alignItems: 'center',
           },
         map_container: {
-         flex: 1,
+          flex: 1,
           backgroundColor: '#fff',
           alignItems: 'center',
           justifyContent: 'center',
