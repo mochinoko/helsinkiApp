@@ -8,9 +8,15 @@ export default function HeaderTop() {
   return (
     <View style={styles.container}>
      <Header 
-     leftComponent={{ icon: 'menu', color: '#fff' }}
-     centerComponent={{ text: 'Helsinki Events Search', style: { color: '#fff' } }} 
-     rightComponent={{ icon: 'home', color: '#fff' }}
+     //leftComponent={{ icon: 'menu', color: '#fff' }}
+     centerComponent={{ 
+       text: 'Helsinki Events Search', 
+       style: { 
+         color: '#fff',
+         fontWeight: 'bold',
+         fontSize: 16,
+        } }} 
+     //rightComponent={{ icon: 'home', color: '#fff' }}
      />
     </View>
   );
@@ -23,5 +29,5 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         justifyContent: 'flex-end',
         width: '100%',
-          },
+      },
     })
