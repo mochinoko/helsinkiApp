@@ -1,20 +1,17 @@
-
 import React from 'react';
 import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
 import Map from './Map';
 import SearchLocation from './SearchLocation';
 import DisplayEvents from './DisplayEvents';
 import Header from './Header';
-import Footer from './Footer';
 
 
 export default function LandingPage() {
-
   return (
     <View style={styles.container}>
     <View style={styles.headerContainer}>
       <Header/>
-     </View>
+    </View>
       <View style={styles.mapContainer}>
        <Map/>
       </View>
@@ -23,9 +20,6 @@ export default function LandingPage() {
         </View>
         <View style={styles.displayContainer}>
           <DisplayEvents />
-        </View>
-        <View style={styles.container}>
-        <Footer />
         </View>
     </View>
   );
@@ -47,20 +41,19 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   mapContainer: {
-    flex: 2,
+    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     marginBottom: 5,
     width: '100%',
-   // height: '100%',
   },
+  
   displayContainer: {
-    flex:1,
-
+    flex: 1,
   },
   txtContainer:{
    margin: 16
-  }
+  },
 
 });
 

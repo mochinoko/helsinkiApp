@@ -2,8 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Alert, StyleSheet, View, Button, } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-
-export default function Map() {
+export default function MapScreen() {
 
     const [region, setRegion] = useState({
         latitude: 60.170275, 
@@ -103,7 +102,7 @@ export default function Map() {
         container: {
             flex: 1,
             backgroundColor: '#fff',
-            width: 700,
+            width: '100%',
             justifyContent: 'center',
             padding: 0,
             alignItems: 'center',
