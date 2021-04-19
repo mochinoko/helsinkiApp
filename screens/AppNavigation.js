@@ -7,6 +7,7 @@ import FavouriteScreen from './FavouriteScreen';
 import MapScreen from './MapScreen';
 import DetailScreen from './DetailScreen'
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Header from '../components/Header';
 
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -22,7 +23,9 @@ const Tab = createBottomTabNavigator();
 
 export default function AppNavigation() {
   return ( 
+
     <NavigationContainer>
+      <Header />
     <Tab.Navigator>
       <Tab.Screen name="Home" 
       component={HomeScreen} 

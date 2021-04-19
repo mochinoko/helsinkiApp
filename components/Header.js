@@ -10,7 +10,7 @@ export default function HeaderTop() {
      <Header 
      //leftComponent={{ icon: 'menu', color: '#fff' }}
      centerComponent={{ 
-       text: 'Helsinki Events Search', 
+       text: 'Helsinki Event Search', 
        style: { 
          color: '#fff',
          fontWeight: 'bold',

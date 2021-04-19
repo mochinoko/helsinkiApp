@@ -9,9 +9,6 @@ import Header from './Header';
 export default function LandingPage() {
   return (
     <View style={styles.container}>
-    <View style={styles.headerContainer}>
-      <Header/>
-    </View>
       <View style={styles.mapContainer}>
        <Map/>
       </View>

@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import LandingPage from '../components/LandingPage';
+import Header from '../components/Header';
 
 const HomeScreen = ({navigation}) => {
-    return (
+    return (  
         <LandingPage />
     );
 };
@@ -16,4 +17,10 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     justifyContent: 'center'
   },
+  headerContainer: {
+    backgroundColor: '#fff',
+   //alignItems: 'center',
+    width: '100%',
+  },
+
 });
