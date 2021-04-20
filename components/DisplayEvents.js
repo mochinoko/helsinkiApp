@@ -63,7 +63,9 @@ const handleDetails = () => {
     <Modal 
       visible={modalVisible} 
       animationType='slide'
-      >
+       transparent={true}
+
+    >
     <View>
     <Button 
       title="Close" 
@@ -113,7 +115,7 @@ const handleDetails = () => {
 
         <Button 
           title="Read more" 
-          onPress={() => handleDetails(true)}
+          onPress={() => handleDetails()}
           style={styles.buttoncontainer} 
         />
         
