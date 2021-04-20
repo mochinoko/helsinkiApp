@@ -12,9 +12,6 @@ export default function LandingPage() {
       <View style={styles.mapContainer}>
        <Map/>
       </View>
-      <View style={styles.txtContainer}>
-        <Text >Search Events near Helsinki!</Text>
-        </View>
         <View style={styles.displayContainer}>
           <DisplayEvents />
         </View>

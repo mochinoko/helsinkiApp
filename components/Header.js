@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Header } from 'react-native-elements';
@@ -11,11 +10,12 @@ export default function HeaderTop() {
      //leftComponent={{ icon: 'menu', color: '#fff' }}
      centerComponent={{ 
        text: 'Helsinki Event Search', 
-       style: { 
+       style: {
          color: '#fff',
          fontWeight: 'bold',
          fontSize: 16,
-        } }} 
+        } 
+      }} 
      //rightComponent={{ icon: 'home', color: '#fff' }}
      />
     </View>

@@ -8,7 +8,6 @@ import MapScreen from './MapScreen';
 import DetailScreen from './DetailScreen'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../components/Header';
-
 import { NavigationContainer } from '@react-navigation/native';
 
 function SettingsScreen() {
@@ -43,7 +42,7 @@ export default function AppNavigation() {
         tabBarLabel: 'Favourite',
         tabBarColor: '#009387',
         tabBarIcon: ({ color }) => (
-          <Icon name="heart" color={color} size={26} />
+          <Icon name="heart" type='FontAwesome5' color={color} size={26} solid />
         ),
       }}
       />
@@ -53,7 +52,7 @@ export default function AppNavigation() {
         tabBarLabel: 'Map',
         tabBarColor: '#009387',
         tabBarIcon: ({ color }) => (
-          <Icon name="map" color={color} size={26} />
+          <Icon name="map"  color={color} size={26} />
         ),
       }}
       />

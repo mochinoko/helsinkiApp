@@ -1,7 +1,8 @@
 import React, {useState, useEffect}  from 'react';
-import { StyleSheet, Text, View, Button, TextInput, FlatList, InputAccessoryView, Image , ScrollView } from 'react-native';
+import { SafeAreaView, Pressable, Alert, Modal, StyleSheet, Text, View, Button, TextInput, FlatList, InputAccessoryView, Image , ScrollView } from 'react-native';
 import _ from 'lodash';
 import { Icon } from 'react-native-elements'
+import DetailsEvent from './DetailsEvent';
 
 const baseurl = "http://open-api.myhelsinki.fi/v1/events/?limit=100";
 
@@ -12,9 +13,9 @@ export default function DisplayEvents() {
   const [query, setQuery] = useState('');
   //hold the data from the API that is going to be used to filter the data.
   const [fullData, setFullData] = useState([]); 
+  //set modal visible or not visible
+  const [modalVisible, setModalVisible] = useState(false);
 
-
-  
   useEffect(() => {
     getAllEvents();
 
@@ -52,10 +53,28 @@ export default function DisplayEvents() {
   }
 
 
-//Create Read more button function
+//Read more deitals function
  
-const readMore = () => {
-
+const handleDetails = () => {
+  setModalVisible(true);
+  console.log('Modal loading');
+  return (
+   <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: "#fff", height:300, width:400 }}>
+    <Modal 
+      visible={modalVisible} 
+      animationType='slide'
+      >
+    <View>
+    <Button 
+      title="Close" 
+      style={styles.buttoncontainer} 
+      onPress={()=> setModalVisible(false)} 
+    />
+    <Text>Hello from modal</Text>
+    </View>
+    </Modal>
+   </View>
+  );
 }
 
   const renderItem= ({ item }) => {
@@ -83,15 +102,20 @@ const readMore = () => {
         </View>
    
         <View styles={{flexDirection: 'row', justifyContent: 'space-around'}}>
-        <Text >Add to favourites</Text>
-        <Icon
-          name='hearto'
-          type='antdesign'
-          color='#517fa4'
-        />
+        <Text>Add to favourites</Text>
+          <Icon 
+            title="Add to favourite"
+            name='hearto'
+            type='antdesign'
+            color='#517fa4'
+          />
         </View>
 
-        <Button title="Read more" onPress={readMore} style={styles.buttoncontainer} />
+        <Button 
+          title="Read more" 
+          onPress={() => handleDetails(true)}
+          style={styles.buttoncontainer} 
+        />
         
        </View>
      )
