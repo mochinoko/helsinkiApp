@@ -1,5 +1,5 @@
 import React, {useState, useEffect}  from 'react';
-import { SafeAreaView, Pressable, Alert, Modal, StyleSheet, Text, View, Button, TextInput, FlatList, InputAccessoryView, Image , ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, FlatList, InputAccessoryView, Image , ScrollView } from 'react-native';
 import _ from 'lodash';
 import { Icon } from 'react-native-elements'
 import DetailsEvent from './DetailsEvent';
@@ -13,8 +13,6 @@ export default function DisplayEvents() {
   const [query, setQuery] = useState('');
   //hold the data from the API that is going to be used to filter the data.
   const [fullData, setFullData] = useState([]); 
-  //set modal visible or not visible
-  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     getAllEvents();
@@ -55,29 +53,6 @@ export default function DisplayEvents() {
 
 //Read more deitals function
  
-const handleDetails = () => {
-  setModalVisible(true);
-  console.log('Modal loading');
-  return (
-   <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: "#fff", height:300, width:400 }}>
-    <Modal 
-      visible={modalVisible} 
-      animationType='slide'
-       transparent={true}
-
-    >
-    <View>
-    <Button 
-      title="Close" 
-      style={styles.buttoncontainer} 
-      onPress={()=> setModalVisible(false)} 
-    />
-    <Text>Hello from modal</Text>
-    </View>
-    </Modal>
-   </View>
-  );
-}
 
   const renderItem= ({ item }) => {
   
@@ -115,10 +90,9 @@ const handleDetails = () => {
 
         <Button 
           title="Read more" 
-          onPress={() => handleDetails()}
+          //onPress={}
           style={styles.buttoncontainer} 
         />
-        
        </View>
      )
  }
