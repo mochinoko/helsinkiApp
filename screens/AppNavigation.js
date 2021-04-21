@@ -5,18 +5,10 @@ import { Text, View } from 'react-native';
 import HomeScreen from './HomeScreen';
 import FavouriteScreen from './FavouriteScreen';
 import MapScreen from './MapScreen';
-import DetailScreen from './DetailScreen'
+import InfoScreen from './InfoScreen'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../components/Header';
 import { NavigationContainer } from '@react-navigation/native';
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
 
 const Tab = createBottomTabNavigator();
 
@@ -56,13 +48,13 @@ export default function AppNavigation() {
         ),
       }}
       />
-      <Tab.Screen name="Settings" 
-      component={SettingsScreen} 
+      <Tab.Screen name="Info" 
+      component={InfoScreen} 
       options={{
-        tabBarLabel: 'setting',
+        tabBarLabel: 'Info',
         tabBarColor: '#009387',
         tabBarIcon: ({ color }) => (
-          <Icon name="cogs" color={color} size={26} />
+          <Icon name="info" color={color} size={26} />
         ),
       }}
       />

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { Alert, StyleSheet, View, Button, } from 'react-native';
+import { Alert, StyleSheet, View, } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import {  Button } from 'react-native-elements'
 
 
 export default function Map() {
@@ -121,7 +122,6 @@ export default function Map() {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-around',
-            borderWidth: 1,
             borderColor:'#fff',
             fontSize: 24, 
             marginTop: 5,
