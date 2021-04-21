@@ -1,5 +1,5 @@
 import React, {useState, useEffect}  from 'react';
-import { StyleSheet, Text, View, TextInput, FlatList, InputAccessoryView, Image , ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, FlatList, InputAccessoryView, Image , ScrollView, Alert, Linking } from 'react-native';
 import _ from 'lodash';
 import { Icon, Button, Overlay  } from 'react-native-elements'
 import moment from 'moment';
@@ -21,7 +21,7 @@ export default function DisplayEvents() {
 
   useEffect(() => {
     getAllEvents();
-
+    getEvent();
   }, [])
 
   // function to fetch all events
@@ -32,12 +32,16 @@ export default function DisplayEvents() {
         .then((data) => { 
           setData(data.data)
           setFullData(data.data)
-          setEventId(data.data.id)
         })
         .catch((error) => console.error(error))
         console.log('loading....');
   }
+// function to get single event
 
+const getEvent = () => {
+ 
+
+}
 
   /*
   Name Search function: extracts the entered value 
@@ -63,7 +67,7 @@ const toggleOverlay = (id) => {
   console.log("toggled overlay");
 }; 
 
-  const renderItem= ({ item, index }) => {
+const renderItem= ({ item, index }) => {
     let id =item.id;
     let text=item.description.intro;
     let nameOfEvent = item.name.fi;
@@ -71,6 +75,10 @@ const toggleOverlay = (id) => {
     let city= item.location.address.locality;
     let timeOfStart = moment(item.event_dates.starting_day).format('lll');
     let timeOfEnd = moment(item.event_dates.ending_day).format('lll');
+
+    let url;
+    if (item.info_url === null) url = "https://www.myhelsinki.fi/"
+    else url = item.info_url
 
     return (
       <View>  
@@ -156,9 +164,14 @@ const toggleOverlay = (id) => {
             'End Date: ' + timeOfEnd + '\n'+
             'Location: ' + address + ', ' +
             city +  '\n'+
-            '\n'+id
+            '\n'+id 
           }
           </Text>
+          <Text 
+          style={{
+            color:'blue'}}
+          onPress={() => Linking.openURL(url)}
+            >Event's URL</Text>
         </Overlay>
   {/* End of Overlay */ }    
       </View>
