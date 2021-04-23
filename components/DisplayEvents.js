@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, FlatList, InputAccessoryView, Image 
 import _ from 'lodash';
 import { Icon, Button, Overlay  } from 'react-native-elements'
 import moment from 'moment';
+import { WebView } from 'react-native-webview';
 
 const baseurl = "http://open-api.myhelsinki.fi/v1/events/?limit=1000";
 
@@ -14,14 +15,21 @@ export default function DisplayEvents() {
   //hold the data from the API that is going to be used to filter the data.
   const [fullData, setFullData] = useState([]); 
 
+  const [singleData, setSingleData]  = useState([]); 
   const [visible, setVisible] = useState(false);
 
   const [eventId, setEventId] =useState(0);
 
+  const [single, setSingle] =useState('');
+
+  //empty object to store single selected event data
+  const [selectedEvent, setSelectedEvent] = useState([]);
+
+  const [singleImage, setSingleImage] = useState('');
 
   useEffect(() => {
     getAllEvents();
-    getEvent();
+   
   }, [])
 
   // function to fetch all events
@@ -32,16 +40,10 @@ export default function DisplayEvents() {
         .then((data) => { 
           setData(data.data)
           setFullData(data.data)
+        
         })
         .catch((error) => console.error(error))
-        console.log('loading....');
   }
-// function to get single event
-
-const getEvent = () => {
- 
-
-}
 
   /*
   Name Search function: extracts the entered value 
@@ -61,13 +63,31 @@ const getEvent = () => {
 
 
 //Read more deitals overlay function
-const toggleOverlay = (id) => {
+/*create state for the 'selected event'
+  and do the fetch when user press read more button to get detailed info
+  if you don't already have that. Save these info to selected event state. 
+  Then in the overlay you will show values from selected event state.*/
+
+const toggleOverlay = (id, singleName, image, singleData) => {
   setVisible(!visible);
-  setEventId(id);
-  console.log("toggled overlay");
+ /*
+  const singleUrl='http://open-api.myhelsinki.fi/v1';
+  fetch(singleUrl + `/event/${id}`)
+  
+  .then((response) => response.json())
+  .then((data) => { 
+    setSelectedEvent(data);
+  })
+  .catch((error) => console.error(error))
+  */
+  setSelectedEvent(singleData);
+  setSingle(singleName);
+  setSingleImage(image);
+  
+  console.log("toggled overlay..." + id + ' '+ singleName + singleData);
 }; 
 
-const renderItem= ({ item, index }) => {
+const renderItem= ({ item }) => {
     let id =item.id;
     let text=item.description.intro;
     let nameOfEvent = item.name.fi;
@@ -75,7 +95,11 @@ const renderItem= ({ item, index }) => {
     let city= item.location.address.locality;
     let timeOfStart = moment(item.event_dates.starting_day).format('lll');
     let timeOfEnd = moment(item.event_dates.ending_day).format('lll');
-
+    let image=item.description.images[0];
+    let singleName =item.name.fi;
+    let singleData=[];
+    singleData=item;
+    
     let url;
     if (item.info_url === null) url = "https://www.myhelsinki.fi/"
     else url = item.info_url
@@ -84,25 +108,21 @@ const renderItem= ({ item, index }) => {
       <View>  
       <Image 
           style={styles.imgContainer} 
-          source={{uri: item.description.images[0].url ? 
-                  `${item.description.images[0].url}` : 
+          source={{uri: image.url ? 
+                  `${image.url}` : 
                   'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
                   }}
         />
-        <View >
-          <Text>
-          {
-            'Name: ' + nameOfEvent+ '\n'+
-            'Start Date: ' + timeOfStart+ '\n'+
-            'End Date: ' + timeOfEnd + '\n'+
-            'Location: ' + address + ', ' +
-            city+  '\n'+
-            '\n'+id
-          }
-          </Text>
+        <View style={styles.textContainer}>
+          <Text>Name: {nameOfEvent} </Text>
+          <Text>Start Date: {timeOfStart}</Text>
+          <Text>End Date: {timeOfEnd === 'Invalid date' ? ' Please check the event\'s URL' : timeOfEnd}</Text>
+          <Text>Location: {address}, {city} </Text>
+          <Text>ID: {id} </Text>
+
         </View>
          <View
-         style={{alignItems: 'center'}}
+         style={{alignItems: 'center', margin: 3}}
          >
           <Icon 
             title="Add to favourite"
@@ -112,19 +132,22 @@ const renderItem= ({ item, index }) => {
           />
           <Text style={styles.txtContainer}>Add to favourites</Text>
           </View>
+
+  {/* If user press, the selected event´s id will be saved  */ }  
         <Button 
           title="Read more" 
-          onPress={toggleOverlay}
+          onPress={()=>(toggleOverlay(id, singleName, image, singleData, selectedEvent))}
           style={styles.buttoncontainer} 
         />
-        <View>   
+        <View
+        >   
     {/* Overlay */ }    
         <Overlay 
           animationType='slide' 
           transparent={true}
           isVisible={visible} 
           onBackdropPress={toggleOverlay}
-          key={index}
+
         >
         <Icon 
           name= 'close'           
@@ -140,7 +163,7 @@ const renderItem= ({ item, index }) => {
             fontWeight: "bold",
           }}
           >
-          {item.name.fi + '\n'}
+          {single}
           </Text>
           <Image 
           style={{
@@ -152,27 +175,22 @@ const renderItem= ({ item, index }) => {
           
           source=
           {{
-            uri: item.description.images[0].url ? 
-            `${item.description.images[0].url}` : 
+            uri: {singleImage}.url ? 
+            `${{singleImage}.url}` : 
             'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
           }}
           />
           <Text>
-          {
-            'Description: '+ text+ '\n'+
-            'Start Date: ' + timeOfStart + '\n'+
-            'End Date: ' + timeOfEnd + '\n'+
-            'Location: ' + address + ', ' +
-            city +  '\n'+
-            '\n'+id 
-          }
+
           </Text>
           <Text 
           style={{
             color:'blue'}}
           onPress={() => Linking.openURL(url)}
             >Event's URL</Text>
+        
         </Overlay>
+       
   {/* End of Overlay */ }    
       </View>
     </View>
@@ -246,55 +264,13 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
+    resizeMode:'contain',
+    
+
   }
 });
 
-/*   <FlatList
-       data={data}
-       keyExtractor={({ id }, index) => id}
-       renderItem={({ item }) => (
-         <Text>{'id:'+ item.id + ', Name: ' + item.name.fi}</Text>
-       )}
-     />
-      <Image 
-          styles={styles.imgContainer} 
-          source={'item.description.images[0].url'} 
-        />
+/*  
 
-      <Text>
-          {
-            'Name: ' + item.name.fi + '\n'+
-            'Description: '+ item.description.intro + '\n'+
-            'Date: ' + item.event_dates.starting_day + '\n'+
-            'Location: ' + item.location.address.street_address + ', ' +
-            item.location.address.locality+  '\n'+
-            '\n'
-           } 
-           </Text>
-<Image styles={styles.imgContainer} source={uri: item.description.images[0].url} />
-           <Image source={item.description.images[0].url} // Use item to set the image source
-            key={id} // Important to set a key for list items
-            style={{
-              width:50,
-              height:50,
-              borderWidth:2,
-              borderColor:'#d35647',
-              resizeMode:'contain',
-              margin:8
-            }}
-          />
-
-          <Image 
-          style={styles.imgContainer} 
-          source={{uri: item.description.images[0].url ? 
-                  `${item.description.images[0].url}` : 
-                  'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
-                  }}
-        />
-        <FlatList
-        data={data}
-        keyExtractor={({ id }, index) => id}
-        renderItem={renderItem}
-        />
-     */
+ */
