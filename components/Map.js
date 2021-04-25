@@ -1,18 +1,23 @@
 import React, {useState, useEffect} from 'react';
-import { Alert, StyleSheet, View, } from 'react-native';
+import { Alert, StyleSheet, View, Linking} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import {  Button } from 'react-native-elements'
+import {  Button, Overlay, Icon, Text, Image } from 'react-native-elements'
+import moment from 'moment';
 
 
 export default function Map() {
 
+  const [visible, setVisible] = useState(false);
     const [region, setRegion] = useState({
         latitude: 60.170275, 
         longitude: 24.943749, 
         latitudeDelta: 0.1, 
         longitudeDelta: 0.1
     });
-    const [markers, setMarkers] = React.useState([]);
+    const [markers, setMarkers] = useState([]);
+    const [selectedEvent, setSelectedEvent] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(false);
 
         useEffect(() => {
             fetchLocation();
@@ -31,8 +36,26 @@ export default function Map() {
         });
         console.log('fetching location..')
     }
-    //console.log(markers);
 
+
+    const toggleOverlay = (marker) => {
+        const singleUrl='http://open-api.myhelsinki.fi/v1';
+       
+          fetch(singleUrl + `/event/${marker.id}`) 
+          .then((response) => response.json())
+          .then((data) => { 
+            setSelectedEvent(data);
+          })
+          .then(_ => setVisible(!visible))
+          .then(_ => setIsLoading(true))
+          .catch((error) => console.error(error))
+        
+      
+        setVisible(!visible);
+       //setIsLoading(true);
+   
+        //console.log('Hello from Map da da! '+ marker.name.fi +marker.id);
+    }
     // function to point Events in Espoo
     const fetchEspoo = () => {
             setRegion({   
@@ -61,8 +84,15 @@ export default function Map() {
                     longitudeDelta: 0.1
                 });   
         }
-    
+
+        let nonText='No details';
+        let url;
+        if (selectedEvent.info_url === null) url = "https://www.myhelsinki.fi/"
+        else url = selectedEvent.info_url
+        
+
     return (
+        
         <View style={styles.container}>
   
             <MapView
@@ -85,6 +115,7 @@ export default function Map() {
                     }}
                     title={marker.name.fi}
                     description={marker.description.intro} 
+                    onPress={()=>(toggleOverlay(marker))}
                     />
                     
                  ))}
@@ -94,10 +125,94 @@ export default function Map() {
                 <Button title="Espoo" style={styles.buttonTwo}  onPress={fetchEspoo}/>
                 <Button title="Vantaa" style={styles.buttonThree} onPress={fetchVantaa} />
             </View>
-       
-        </View>
+ {/* Overlay */ }    
+        <Overlay 
+        animationType='slide' 
+        transparent={true}
+        isVisible={visible} 
+        onBackdropPress={toggleOverlay}
+         >
+        <Icon 
+            name= 'close'           
+            onPress={toggleOverlay}
+            style={{
+            alignItems: 'flex-end', 
+            margin: 2,
+            }}
+        />
+        <Text
+        style={{
+          fontSize:24,
+          fontWeight: "bold",
+        }}
+        >
+        {
+            isLoading ? selectedEvent.name.fi: 'none' 
+        }
+        </Text>      
+        <Image 
+        style={{
+          width:200,
+          height:200,
+          resizeMode:'contain',
+          margin:5
+        }}
         
-   
+        source=
+        {isLoading? {
+          uri: selectedEvent.description.images[0].url ? 
+          `${selectedEvent.description.images[0].url}` : 
+          'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
+        }:'https://www.freeiconspng.com/uploads/no-image-icon-4.png' }
+        />
+        <Text>Start Date: 
+        {
+          isLoading ? 
+          moment(selectedEvent.event_dates.starting_day).format('lll'):nonText
+         }
+         </Text>
+        <Text>End Date: 
+        {
+          isLoading ?
+           moment(selectedEvent.event_dates.ending_day).format('LLL')=== 'Invalid date' ? ' Please check the event\'s URL' : selectedEvent.event_dates.ending_day :nonText}</Text>
+        <Text>
+         Location:
+          {
+          isLoading ?
+            selectedEvent.location.address.street_address: nonText
+          }, {' '}
+          {
+            isLoading ?
+              selectedEvent.location.address.locality: nonText
+          }{' '}
+          {
+            isLoading ?
+              selectedEvent.location.address.postal_code: nonText
+          }
+
+         </Text>
+
+        <Text>
+        {
+        isLoading ? selectedEvent.description.intro: `${nonText}`
+
+        }
+        </Text>
+
+
+        <Text 
+          style={{
+          color:'blue'
+        }}
+          onPress={() => Linking.openURL(url)}
+          >
+          Event's URL
+        </Text>
+
+      </Overlay>
+     
+ {/*End of Overlay */ }    
+        </View>
     );
 }        
     const styles = StyleSheet.create({

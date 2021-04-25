@@ -15,21 +15,16 @@ export default function DisplayEvents() {
   //hold the data from the API that is going to be used to filter the data.
   const [fullData, setFullData] = useState([]); 
 
-  const [singleData, setSingleData]  = useState([]); 
   const [visible, setVisible] = useState(false);
-
-  const [eventId, setEventId] =useState(0);
-
-  const [single, setSingle] =useState('');
 
   //empty object to store single selected event data
   const [selectedEvent, setSelectedEvent] = useState([]);
 
-  const [singleImage, setSingleImage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getAllEvents();
-   
+    
   }, [])
 
   // function to fetch all events
@@ -63,31 +58,27 @@ export default function DisplayEvents() {
 
 
 //Read more deitals overlay function
-/*create state for the 'selected event'
-  and do the fetch when user press read more button to get detailed info
-  if you don't already have that. Save these info to selected event state. 
-  Then in the overlay you will show values from selected event state.*/
 
-const toggleOverlay = (id, singleName, image, singleData) => {
-  setVisible(!visible);
- /*
-  const singleUrl='http://open-api.myhelsinki.fi/v1';
-  fetch(singleUrl + `/event/${id}`)
+const toggleOverlay = (id) => {
   
+ const singleUrl='http://open-api.myhelsinki.fi/v1';
+// setIsLoading(true);
+  fetch(singleUrl + `/event/${id}`) 
   .then((response) => response.json())
   .then((data) => { 
     setSelectedEvent(data);
   })
+  .then(_ => setVisible(!visible))
+  .then(_ => setIsLoading(true))
   .catch((error) => console.error(error))
-  */
-  setSelectedEvent(singleData);
-  setSingle(singleName);
-  setSingleImage(image);
-  
-  console.log("toggled overlay..." + id + ' '+ singleName + singleData);
+
+  setVisible(!visible);
+  //console.log("toggled overlay..." + id + ' '+ selectedEvent.name.fi+ +'... '+ selectedEvent.description.intro);
 }; 
 
+
 const renderItem= ({ item }) => {
+
     let id =item.id;
     let text=item.description.intro;
     let nameOfEvent = item.name.fi;
@@ -96,13 +87,15 @@ const renderItem= ({ item }) => {
     let timeOfStart = moment(item.event_dates.starting_day).format('lll');
     let timeOfEnd = moment(item.event_dates.ending_day).format('lll');
     let image=item.description.images[0];
-    let singleName =item.name.fi;
-    let singleData=[];
-    singleData=item;
-    
+    let nonText='No details';
+
     let url;
-    if (item.info_url === null) url = "https://www.myhelsinki.fi/"
-    else url = item.info_url
+    if (selectedEvent.info_url === null) url = "https://www.myhelsinki.fi/"
+    else url = selectedEvent.info_url
+
+    let normalURL;
+    if(item.info_url === null) normalURL = "https://www.myhelsinki.fi/"
+    else normalURL = item.info_url
 
     return (
       <View>  
@@ -118,7 +111,11 @@ const renderItem= ({ item }) => {
           <Text>Start Date: {timeOfStart}</Text>
           <Text>End Date: {timeOfEnd === 'Invalid date' ? ' Please check the event\'s URL' : timeOfEnd}</Text>
           <Text>Location: {address}, {city} </Text>
-          <Text>ID: {id} </Text>
+          <Text 
+          style={{
+            color:'blue'}}
+             onPress={() => Linking.openURL(normalURL)}
+            >Event's URL</Text>
 
         </View>
          <View
@@ -136,7 +133,7 @@ const renderItem= ({ item }) => {
   {/* If user press, the selected event´s id will be saved  */ }  
         <Button 
           title="Read more" 
-          onPress={()=>(toggleOverlay(id, singleName, image, singleData, selectedEvent))}
+          onPress={()=>(toggleOverlay(id))}
           style={styles.buttoncontainer} 
         />
         <View
@@ -147,7 +144,6 @@ const renderItem= ({ item }) => {
           transparent={true}
           isVisible={visible} 
           onBackdropPress={toggleOverlay}
-
         >
         <Icon 
           name= 'close'           
@@ -163,7 +159,7 @@ const renderItem= ({ item }) => {
             fontWeight: "bold",
           }}
           >
-          {single}
+          {isLoading ? selectedEvent.name.fi: nonText }
           </Text>
           <Image 
           style={{
@@ -174,24 +170,59 @@ const renderItem= ({ item }) => {
           }}
           
           source=
-          {{
-            uri: {singleImage}.url ? 
-            `${{singleImage}.url}` : 
+          {isLoading? {
+            uri: selectedEvent.description.images[0].url ? 
+            `${selectedEvent.description.images[0].url}` : 
             'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
-          }}
+          }:'https://www.freeiconspng.com/uploads/no-image-icon-4.png' }
           />
+          <Text>Start Date: 
+          {
+            isLoading ? 
+            moment(selectedEvent.event_dates.starting_day).format('lll'):nonText
+           }
+           </Text>
+          <Text>End Date: 
+          {
+            isLoading ?
+             moment(selectedEvent.event_dates.ending_day).format('lll')=== 'Invalid date' ? ' Please check the event\'s URL' : selectedEvent.event_dates.ending_day :nonText}</Text>
           <Text>
+           Location:
+            {
+            isLoading ?
+              selectedEvent.location.address.street_address: nonText
+            }, {' '}
+            {
+              isLoading ?
+                selectedEvent.location.address.locality: nonText
+            }{' '}
+            {
+              isLoading ?
+                selectedEvent.location.address.postal_code: nonText
+            }
 
+           </Text>
+
+          <Text>
+          {
+          isLoading ? selectedEvent.description.intro: `${nonText}`
+
+          }
           </Text>
+
+
           <Text 
-          style={{
-            color:'blue'}}
-          onPress={() => Linking.openURL(url)}
-            >Event's URL</Text>
+            style={{
+            color:'blue'
+          }}
+            onPress={() => Linking.openURL(url)}
+            >
+            Event's URL
+          </Text>
         
         </Overlay>
        
-  {/* End of Overlay */ }    
+   {/*End of Overlay */ }    
       </View>
     </View>
      )
@@ -272,5 +303,8 @@ const styles = StyleSheet.create({
 });
 
 /*  
+          { 
+            selectedEvent.description.intro === null ? ' Please check the event\'s URL' : description=selectedEvent.description.intro
+          }
 
  */
