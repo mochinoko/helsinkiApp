@@ -43,6 +43,7 @@ export default function Map() {
        
           fetch(singleUrl + `/event/${marker.id}`) 
           .then((response) => response.json())
+          
           .then((data) => { 
             setSelectedEvent(data);
           })
@@ -147,7 +148,7 @@ export default function Map() {
         }}
         >
         {
-            isLoading ? selectedEvent.name.fi: 'none' 
+            isLoading ? selectedEvent.name.fi: nonText
         }
         </Text>      
         <Image 
@@ -159,7 +160,7 @@ export default function Map() {
         }}
         
         source=
-        {isLoading? {
+        {isLoading ? {
           uri: selectedEvent.description.images[0].url ? 
           `${selectedEvent.description.images[0].url}` : 
           'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
@@ -174,7 +175,9 @@ export default function Map() {
         <Text>End Date: 
         {
           isLoading ?
-           moment(selectedEvent.event_dates.ending_day).format('LLL')=== 'Invalid date' ? ' Please check the event\'s URL' : selectedEvent.event_dates.ending_day :nonText}</Text>
+           moment(selectedEvent.event_dates.ending_day).format('LLL') === 'Invalid date' ? 
+           ' Please check the event\'s URL' : moment(selectedEvent.event_dates.ending_day).format('lll') :nonText
+        }</Text>
         <Text>
          Location:
           {

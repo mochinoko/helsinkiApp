@@ -1,9 +1,10 @@
 import React, {useState, useEffect}  from 'react';
-import { StyleSheet, Text, View, TextInput, FlatList, InputAccessoryView, Image , ScrollView, Alert, Linking } from 'react-native';
+import { StyleSheet, Text, View, TextInput, FlatList, InputAccessoryView, Image , ScrollView, Alert, Linking, ListEmptyComponent } from 'react-native';
 import _ from 'lodash';
 import { Icon, Button, Overlay  } from 'react-native-elements'
 import moment from 'moment';
-import { WebView } from 'react-native-webview';
+//import { WebView } from 'react-native-webview';
+import AddFavourite from './AddFavourite';
 
 const baseurl = "http://open-api.myhelsinki.fi/v1/events/?limit=1000";
 
@@ -20,7 +21,11 @@ export default function DisplayEvents() {
   //empty object to store single selected event data
   const [selectedEvent, setSelectedEvent] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] =useState(false);
+  //hold the data of favourites list
+  const [favouriteList, setFavouriteList] = useState([]);
+  
+  
 
   useEffect(() => {
     getAllEvents();
@@ -73,8 +78,34 @@ const toggleOverlay = (id) => {
   .catch((error) => console.error(error))
 
   setVisible(!visible);
-  //console.log("toggled overlay..." + id + ' '+ selectedEvent.name.fi+ +'... '+ selectedEvent.description.intro);
 }; 
+
+const heartPressed = (id) => {
+  /*
+  const favourites = Object.assign([], favouriteList);
+  const index = favourites.findIndex(f=>f.id === item.id);
+  if(index === -1 ){
+    favouritesList.push(item);
+  } else {
+    favouritesList.splice(index, 1);
+  }
+  setFavouriteList(item);
+  */
+
+  const singleUrl='http://open-api.myhelsinki.fi/v1';
+  fetch(singleUrl + `/event/${id}`) 
+  .then((response) => response.json())
+  .then((item) => { 
+    //favouriteList.push(item);
+    setFavouriteList(item);
+  })
+  .catch((error) => console.error(error))
+
+
+  console.log('This event is addded to favourites: ' + favouriteList.name.fi);
+}
+
+
 
 
 const renderItem= ({ item }) => {
@@ -88,7 +119,6 @@ const renderItem= ({ item }) => {
     let timeOfEnd = moment(item.event_dates.ending_day).format('lll');
     let image=item.description.images[0];
     let nonText='No details';
-
     let url;
     if (selectedEvent.info_url === null) url = "https://www.myhelsinki.fi/"
     else url = selectedEvent.info_url
@@ -101,13 +131,15 @@ const renderItem= ({ item }) => {
       <View>  
       <Image 
           style={styles.imgContainer} 
-          source={{uri: image.url ? 
+          source=
+          {{uri: image.url ? 
                   `${image.url}` : 
                   'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
-                  }}
+          }}
+          ListEmptyComponent = 'https://www.freeiconspng.com/uploads/no-image-icon-4.png'
         />
         <View style={styles.textContainer}>
-          <Text>Name: {nameOfEvent} </Text>
+          <Text>Name: {nameOfEvent === null ? ' Please check the event\'s URL' : nameOfEvent} </Text>
           <Text>Start Date: {timeOfStart}</Text>
           <Text>End Date: {timeOfEnd === 'Invalid date' ? ' Please check the event\'s URL' : timeOfEnd}</Text>
           <Text>Location: {address}, {city} </Text>
@@ -118,18 +150,22 @@ const renderItem= ({ item }) => {
             >Event's URL</Text>
 
         </View>
-         <View
-         style={{alignItems: 'center', margin: 3}}
-         >
-          <Icon 
-            title="Add to favourite"
-            name='hearto'
-            type='antdesign'
-            color='#06A8F7'
-          />
-          <Text style={styles.txtContainer}>Add to favourites</Text>
-          </View>
+        
+        <View
+        style={{alignItems: 'center', margin: 3}}
+        >
+         <Icon 
+           title="Add to favourite"
+           name='hearto'
+           type='antdesign'
+           color='#06A8F7'
+            onPress={() => (heartPressed(id))}
+         />
+         <Text style={{alignItems: 'center', margin: 3}}>Add to favourites</Text>
+         <AddFavourite favouriteList={favouriteList}/>
 
+         </View>
+    
   {/* If user press, the selected event´s id will be saved  */ }  
         <Button 
           title="Read more" 
@@ -159,7 +195,10 @@ const renderItem= ({ item }) => {
             fontWeight: "bold",
           }}
           >
-          {isLoading ? selectedEvent.name.fi: nonText }
+          {
+            isLoading ? 
+            selectedEvent.name.fi === null ? 'Currently not available, please check Event\'s URL ' : selectedEvent.name.fi: nonText 
+          }
           </Text>
           <Image 
           style={{
@@ -171,7 +210,7 @@ const renderItem= ({ item }) => {
           
           source=
           {isLoading? {
-            uri: selectedEvent.description.images[0].url ? 
+             uri: selectedEvent.description.images[0].url ? 
             `${selectedEvent.description.images[0].url}` : 
             'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
           }:'https://www.freeiconspng.com/uploads/no-image-icon-4.png' }
@@ -179,13 +218,16 @@ const renderItem= ({ item }) => {
           <Text>Start Date: 
           {
             isLoading ? 
-            moment(selectedEvent.event_dates.starting_day).format('lll'):nonText
+            moment(selectedEvent.event_dates.starting_day).format('lll') : nonText
            }
            </Text>
           <Text>End Date: 
           {
             isLoading ?
-             moment(selectedEvent.event_dates.ending_day).format('lll')=== 'Invalid date' ? ' Please check the event\'s URL' : selectedEvent.event_dates.ending_day :nonText}</Text>
+              moment(selectedEvent.event_dates.ending_day).format('LLL') === 'Invalid date' ? 
+           ' Please check the event\'s URL' : moment(selectedEvent.event_dates.ending_day).format('lll') :nonText
+          }
+          </Text>
           <Text>
            Location:
             {
