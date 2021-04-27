@@ -24,7 +24,7 @@ const renderEmptyContainer = () => {
   return(
     <View>
      <FlatList 
-     //data={item}
+     //data={}
      keyExtractor={({ id }, index) => id}
      renderItem={renderItem}
      ListEmptyComponent={renderEmptyContainer}

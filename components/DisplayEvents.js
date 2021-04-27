@@ -81,32 +81,17 @@ const toggleOverlay = (id) => {
 }; 
 
 const heartPressed = (id) => {
-  /*
-  const favourites = Object.assign([], favouriteList);
-  const index = favourites.findIndex(f=>f.id === item.id);
-  if(index === -1 ){
-    favouritesList.push(item);
-  } else {
-    favouritesList.splice(index, 1);
-  }
-  setFavouriteList(item);
-  */
 
   const singleUrl='http://open-api.myhelsinki.fi/v1';
   fetch(singleUrl + `/event/${id}`) 
   .then((response) => response.json())
   .then((item) => { 
-    //favouriteList.push(item);
     setFavouriteList(item);
   })
   .catch((error) => console.error(error))
 
-
   console.log('This event is addded to favourites: ' + favouriteList.name.fi);
 }
-
-
-
 
 const renderItem= ({ item }) => {
 
