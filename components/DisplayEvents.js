@@ -5,6 +5,8 @@ import { Icon, Button, Overlay  } from 'react-native-elements'
 import moment from 'moment';
 //import { WebView } from 'react-native-webview';
 import AddFavourite from './AddFavourite';
+import * as SQLite from 'expo-sqlite';
+
 
 const baseurl = "http://open-api.myhelsinki.fi/v1/events/?limit=1000";
 
@@ -24,12 +26,24 @@ export default function DisplayEvents() {
   const [isLoading, setIsLoading] =useState(false);
   //hold the data of favourites list
   const [favouriteList, setFavouriteList] = useState([]);
-  
-  
+
+  //States are needed for title and credit input fields and all courses fetched from the database.
+  const [name, setName] = useState('');
+  const [eventId, setEventId] = useState('');
+  const [location, setLocation] =useState('');
+  const [favouriteData, setFavouriteData] = useState([]);
+
+  //  Open database (Returns database object) and create it, if it doesn’t exists.
+ const db = SQLite.openDatabase('eventdb.db');
+
+ useEffect(() => {
+  db.transaction(tx => {
+      tx.executeSql('create table if not exists eventlist (id integer primary key not null, name text, eventId text location text);');
+  }, null, updateList);
+}, []);
 
   useEffect(() => {
     getAllEvents();
-    
   }, [])
 
   // function to fetch all events
@@ -79,6 +93,7 @@ const toggleOverlay = (id) => {
 
   setVisible(!visible);
 }; 
+// add to favourite List, save to database
 
 const heartPressed = (id) => {
 
@@ -86,11 +101,30 @@ const heartPressed = (id) => {
   fetch(singleUrl + `/event/${id}`) 
   .then((response) => response.json())
   .then((item) => { 
-    setFavouriteList(item);
+    db.transaction(tx => {
+      tx.executeSql('insert into eventlist (name, eventId, location) values (?, ?, ?);', [name, eventId, location]);
+  }, null, updateList 
+  )
+   // setFavouriteList(item);
+  setName(item.name.fi);
+  setEventId(item.id);
+  setLocation(item.location.street_address);
+    console.log('This event is addded to favourites: ' + item.name.fi);
   })
   .catch((error) => console.error(error))
+}
 
-  console.log('This event is addded to favourites: ' + favouriteList.name.fi);
+
+
+//update product list
+
+const updateList = () => {
+  db.transaction(
+      tx => {
+          tx.executeSql('select * from eventlist;', [], (_, { rows }) => 
+          setFavouriteData(rows._array)
+          );
+      });
 }
 
 const renderItem= ({ item }) => {
@@ -117,8 +151,8 @@ const renderItem= ({ item }) => {
       <Image 
           style={styles.imgContainer} 
           source=
-          {{uri: image.url ? 
-                  `${image.url}` : 
+          {{uri: item.description.images[0] ? 
+                  `${item.description.images[0]}` : 
                   'https://www.freeiconspng.com/uploads/no-image-icon-4.png' 
           }}
           ListEmptyComponent = 'https://www.freeiconspng.com/uploads/no-image-icon-4.png'
@@ -147,8 +181,7 @@ const renderItem= ({ item }) => {
             onPress={() => (heartPressed(id))}
          />
          <Text style={{alignItems: 'center', margin: 3}}>Add to favourites</Text>
-         <AddFavourite favouriteList={favouriteList}/>
-
+    
          </View>
     
   {/* If user press, the selected event´s id will be saved  */ }  

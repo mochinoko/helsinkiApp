@@ -7,27 +7,30 @@ import moment from 'moment';
 export default function AddFavourite (item){
 
 const renderItem = ({item}) => {
+
     return (
-        <View style={styles.RowStyle}>
-            <Text style={styles.txtContainer}>{''}</Text>
-        </View>
+    <View>
+        <Text> {item.name}, {item.location} </Text>
+    </View>
     );  
 }
+
 const renderEmptyContainer = () => {
     return(
     <View style={styles.EmptyList}>
-    <Text>No favourites at the moment</Text>
+         <Text> No favourites at the moment</Text>
     </View>
     );
 }
 
   return(
     <View>
+    <Text>My Favourites: </Text>
+ 
      <FlatList 
-     //data={}
-     keyExtractor={({ id }, index) => id}
-     renderItem={renderItem}
-     ListEmptyComponent={renderEmptyContainer}
+        keyExtractor={({ item } ) => item.id}
+        renderItem={renderItem}
+        ListEmptyComponent={renderEmptyContainer}
      />
 
     </View>
@@ -49,7 +52,15 @@ const styles = StyleSheet.create({
         marginTop: 10,
         justifyContent: 'center',
 
-    }
+    },
+    listcontainer: {
+        flex:3,
+        padding: 10,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }
+    
 });
 /*   <View>
 
