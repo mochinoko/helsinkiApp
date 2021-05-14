@@ -3,12 +3,10 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import AddFavourite from '../components/AddFavourite';
 
 //function to save list of likes
-
-
 const FavouriteScreen = ({navigation}) => {
     return (
       <View style={styles.container}>
-      <AddFavourite />
+        <AddFavourite />
       </View>
     );
 };

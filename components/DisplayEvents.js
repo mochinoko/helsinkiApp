@@ -1,16 +1,21 @@
 import React, {useState, useEffect}  from 'react';
 import { StyleSheet, Text, View, TextInput, FlatList, InputAccessoryView, Image , ScrollView, Alert, Linking, ListEmptyComponent } from 'react-native';
 import _ from 'lodash';
-import { Icon, Button, Overlay  } from 'react-native-elements'
+import { Icon, Button, Overlay  } from 'react-native-elements';
 import moment from 'moment';
 //import { WebView } from 'react-native-webview';
 import AddFavourite from './AddFavourite';
 import * as SQLite from 'expo-sqlite';
+import { desktopNames } from 'browserslist';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 
 
 const baseurl = "http://open-api.myhelsinki.fi/v1/events/?limit=1000";
+const Stack = createStackNavigator();
 
-export default function DisplayEvents() {
+export default function DisplayEvents( {navigation }) {
   
   const [data, setData] = useState([]);
   //any input provided by the user to search through the list of data.
@@ -35,13 +40,13 @@ export default function DisplayEvents() {
 
   //  Open database (Returns database object) and create it, if it doesn’t exists.
  const db = SQLite.openDatabase('eventdb.db');
-
+/*
  useEffect(() => {
   db.transaction(tx => {
       tx.executeSql('create table if not exists eventlist (id integer primary key not null, name text, eventId text location text);');
   }, null, updateList);
 }, []);
-
+*/
   useEffect(() => {
     getAllEvents();
   }, [])
@@ -93,6 +98,7 @@ const toggleOverlay = (id) => {
 
   setVisible(!visible);
 }; 
+
 // add to favourite List, save to database
 
 const heartPressed = (id) => {
@@ -101,23 +107,28 @@ const heartPressed = (id) => {
   fetch(singleUrl + `/event/${id}`) 
   .then((response) => response.json())
   .then((item) => { 
+    /*
     db.transaction(tx => {
       tx.executeSql('insert into eventlist (name, eventId, location) values (?, ?, ?);', [name, eventId, location]);
   }, null, updateList 
   )
-   // setFavouriteList(item);
+  */
+  setFavouriteList(item);
   setName(item.name.fi);
   setEventId(item.id);
-  setLocation(item.location.street_address);
-    console.log('This event is addded to favourites: ' + item.name.fi);
+  setLocation(item.location.address.street_address);
+  setFavouriteData([item, ...favouriteData]);
+    console.log('This is addded to favourites: ' + item.name.fi +', ' +' '+ item.id);
+    //console.log(favouriteList.name.fi);
   })
   .catch((error) => console.error(error))
+
 }
 
 
 
 //update product list
-
+/*
 const updateList = () => {
   db.transaction(
       tx => {
@@ -126,7 +137,7 @@ const updateList = () => {
           );
       });
 }
-
+*/
 const renderItem= ({ item }) => {
 
     let id =item.id;
@@ -179,9 +190,10 @@ const renderItem= ({ item }) => {
            type='antdesign'
            color='#06A8F7'
             onPress={() => (heartPressed(id))}
+            AddFavourite={AddFavourite}
+            item={item}
          />
          <Text style={{alignItems: 'center', margin: 3}}>Add to favourites</Text>
-    
          </View>
     
   {/* If user press, the selected event´s id will be saved  */ }  
@@ -284,6 +296,7 @@ const renderItem= ({ item }) => {
        
    {/*End of Overlay */ }    
       </View>
+      
     </View>
      )
  }

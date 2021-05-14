@@ -1,16 +1,17 @@
-import React, {useState, useEffect}  from 'react';
+import React, {useState}  from 'react';
 import { StyleSheet, Text, View, TextInput, FlatList, InputAccessoryView, Image , ScrollView, Alert, Linking } from 'react-native';
 import _ from 'lodash';
 import { Icon, Button, Overlay  } from 'react-native-elements'
 import moment from 'moment';
+import DisplayEvents from './DisplayEvents';
 
-export default function AddFavourite (item){
+export default function AddFavourite(){
 
-const renderItem = ({item}) => {
+const renderItem = ({ item }) => {
 
     return (
     <View>
-        <Text> {item.name}, {item.location} </Text>
+       <Text>{this.props.item.name.fi}</Text>
     </View>
     );  
 }
@@ -22,17 +23,16 @@ const renderEmptyContainer = () => {
     </View>
     );
 }
-
+  
   return(
     <View>
-    <Text>My Favourites: </Text>
- 
      <FlatList 
+        data={props.favouriteList}
         keyExtractor={({ item } ) => item.id}
         renderItem={renderItem}
         ListEmptyComponent={renderEmptyContainer}
+        ListHeaderComponent={<Text >Favourite Events</Text>}
      />
-
     </View>
     );
 }
@@ -62,20 +62,17 @@ const styles = StyleSheet.create({
       }
     
 });
-/*   <View>
+/*   
 
-    <View
-    style={{alignItems: 'center', margin: 3}}
-    >
-     <Icon 
-       title="Add to favourite"
-       name='hearto'
-       type='antdesign'
-       color='#06A8F7'
-       onPress={() => heartPressed(id)}
+
+     <View>
+    <Text>My Favourites: </Text>
+
+     <FlatList 
+        keyExtractor={({ item } ) => item.id}
+        renderItem={renderItem}
+        ListEmptyComponent={renderEmptyContainer}
+       
      />
-     <Text style={styles.txtContainer}>Add to favourites</Text>
-     </View>
-
     </View>
     */
