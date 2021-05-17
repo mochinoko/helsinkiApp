@@ -7,11 +7,11 @@ import DisplayEvents from './DisplayEvents';
 
 export default function AddFavourite(){
 
-const renderItem = ({ item }) => {
+const renderItem = ({ props }) => {
 
     return (
     <View>
-       <Text>{this.props.item.name.fi}</Text>
+       <Text>{props.favouriteList.name.fi}</Text>
     </View>
     );  
 }

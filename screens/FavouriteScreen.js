@@ -6,7 +6,7 @@ import AddFavourite from '../components/AddFavourite';
 const FavouriteScreen = ({navigation}) => {
     return (
       <View style={styles.container}>
-        <AddFavourite />
+        <AddFavourite  />
       </View>
     );
 };

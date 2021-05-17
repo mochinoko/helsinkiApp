@@ -194,6 +194,7 @@ const renderItem= ({ item }) => {
             item={item}
          />
          <Text style={{alignItems: 'center', margin: 3}}>Add to favourites</Text>
+   
          </View>
     
   {/* If user press, the selected event´s id will be saved  */ }  
