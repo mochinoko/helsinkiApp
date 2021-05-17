@@ -1,15 +1,16 @@
 # Helsinki Event Search App
 
 This is an app to find events in Helsinki Metropolitan Area. User can search by keywords or locations.
+Haaga-Helia AMK / Mobile Programming SPRING 2021
 
 # DEMO
 
 ![HelsinkiEventSearchApp](https://user-images.githubusercontent.com/35254255/118516163-bf48b280-b73e-11eb-9e16-4a6ed966e6d8.png)
 
 # Requirements
-  expo: ~40.0.0
-  react-native
-  react: 16.13.1
+ * expo: ~40.0.0
+ * react-native
+ * react: 16.13.1
   
 # Main features
 
