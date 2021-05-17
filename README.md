@@ -1,7 +1,7 @@
 # Helsinki Event Search App
 
-This is an app to find events in Helsinki Metropolitan Area. User can search by keywords or locations.
-Haaga-Helia AMK / Mobile Programming SPRING 2021
+###### This is an app to find events in Helsinki Metropolitan Area. User can search by keywords or locations.
+###### Haaga-Helia AMK / Mobile Programming SPRING 2021
 
 # DEMO
 
@@ -29,3 +29,4 @@ Haaga-Helia AMK / Mobile Programming SPRING 2021
 
 
 
+ 
